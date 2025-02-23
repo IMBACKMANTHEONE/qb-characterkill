@@ -1,5 +1,5 @@
 Config = {}
-
+Config.debug = false
 -- Configuration for activating/deactivating the authorization check
 Config.use_citizenid = false  
 Config.use_jobs = false      
