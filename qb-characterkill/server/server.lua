@@ -10,6 +10,12 @@ CreateThread(function()
             
             if not User then return end
             
+            -- Debugging, falls aktiviert
+            if Config.debug then
+                print("[DEBUG] Befehl ausgeführt von: " .. src)
+                print("[DEBUG] Zielspieler ID: " .. (playerId or "N/A"))
+            end
+            
             -- Berechtigungen prüfen
             local hasPermission = false
             
@@ -35,6 +41,12 @@ CreateThread(function()
             
             if Player then
                 local citizenid = Player.PlayerData.citizenid
+                
+                if Config.debug then
+                    print("[DEBUG] Spieler gefunden: " .. citizenid)
+                    print("[DEBUG] Starte Datenlöschung...")
+                end
+                
                 DropPlayer(playerId, Lang:t("info.kick_message"))
                 CreateThread(function()
                     Wait(200)
@@ -45,6 +57,10 @@ CreateThread(function()
                     exports.oxmysql:execute('DELETE FROM player_houses WHERE citizenid = ?', { citizenid })
                     exports.oxmysql:execute('DELETE FROM player_contacts WHERE citizenid =?', { citizenid })
                     exports.oxmysql:execute('DELETE FROM playerskins WHERE citizenid =?', { citizenid })
+                    
+                    if Config.debug then
+                        print("[DEBUG] Datenlöschung abgeschlossen für: " .. citizenid)
+                    end
                     
                     TriggerClientEvent("QBCore:Notify", src, Lang:t("info.command_executed"))
                     Config.finish_function(src, playerId)
